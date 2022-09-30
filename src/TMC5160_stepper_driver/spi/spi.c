@@ -36,3 +36,30 @@ uint8_t spi_com(uint8_t data_out)
     //return received data
     return SPDR;
 }
+
+//send 40-bit data frame consisting of 8-bit adress and 32-bit data, returns spi status byte
+spi_stat_t spi_send(uint8_t addr, uint32_t data)
+{
+    //transmit adress
+    spi_com(addr);
+
+    //transmit data
+    spi_com((uint8_t)(data >> 24));
+    spi_com((uint8_t)(data >> 16));
+    spi_com((uint8_t)(data >> 8));
+    return spi_com((uint8_t)(data));
+}
+
+//receive 32-bit data
+uint32_t spi_receive()
+{
+    //read and discard status byte
+    spi_com(0);
+
+    //read data
+    uint32_t data;
+    data = (uint32_t)spi_com(0) << 24;
+    data |= (uint32_t)spi_com(0) << 16;
+    data |= (uint32_t)spi_com(0) << 8;
+    return data |= (uint32_t)spi_com(0);
+}
