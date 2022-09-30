@@ -31,6 +31,9 @@ typedef enum
 }spi_freq_t;
 
 //function for setting up spi modul
-bool spi_init(bitorder_t bitorder, spi_mode_t mode, spi_freq_t freq_divdr);
+void spi_init(bitorder_t bitorder, spi_mode_t mode, spi_freq_t freq_divdr);
+
+//function for transmitting and receiving data
+uint8_t spi_com(uint8_t data_out);
 
 #endif //! __TMC5160_SPI_H__
