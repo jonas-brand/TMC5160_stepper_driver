@@ -7,7 +7,7 @@
 #define MISO PB3
 
 //function for setting up spi modul
-void spi_init(bitorder_t bitorder, spi_mode_t mode, spi_freq_t freq_divdr)
+void spi_init()
 {
     //write the power reduction spi bit to 0 to enable spi operation
     PRR0 &= _BV(PRSPI);
@@ -17,10 +17,11 @@ void spi_init(bitorder_t bitorder, spi_mode_t mode, spi_freq_t freq_divdr)
     DDR_SPI &= _BV(MISO);
 
     //configure spi control register
-    SPCR = bitorder | mode | freq_divdr;
+    //master operation, spi mode 3, SCK frequency = F_CPU / 16
+    SPCR = _BV(MSTR) | _BV(CPOL) | _BV(CPHA) | _BV(SPR0);
 
-    //set mode to master and enable spi
-    SPCR = _BV(MSTR) | _BV(SPE);
+    //enable spi
+    SPCR = _BV(SPE);
 }
 
 //function for transmitting and receiving data
