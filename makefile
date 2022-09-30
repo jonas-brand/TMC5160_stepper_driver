@@ -1,3 +1,6 @@
+#main directory
+DIR = $(shell cd)
+
 #program paths
 CC = avr-gcc
 OBJCOPY = "C:\avr-gcc-11.1.0-x64-windows\avr-gcc-11.1.0-x64-windows\bin\avr-objcopy"
@@ -7,7 +10,7 @@ AVRDUDE = "C:\avr-gcc-11.1.0-x64-windows\avr-gcc-11.1.0-x64-windows\bin\avrdude"
 USBPORT = COM4
 
 #flags
-CFLAGS = -Os -DF_CPU=16000000L -mmcu=atmega2560
+CFLAGS = -Os -DF_CPU=16000000L -mmcu=atmega2560 -I$(DIR)\src
 BFLAGS = -D -F -V -c wiring -p ATMEGA2560 -P $(USBPORT) -b 115200
 
 #BUILD===================================================================================================
