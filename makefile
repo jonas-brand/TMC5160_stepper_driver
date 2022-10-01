@@ -7,7 +7,7 @@ OBJCOPY = "C:\avr-gcc-11.1.0-x64-windows\avr-gcc-11.1.0-x64-windows\bin\avr-objc
 AVRDUDE = "C:\avr-gcc-11.1.0-x64-windows\avr-gcc-11.1.0-x64-windows\bin\avrdude"
 
 #usb-port
-USBPORT = COM4
+USBPORT = COM3
 
 #flags
 CFLAGS = -Os -DF_CPU=16000000L -mmcu=atmega2560 -I$(DIR)\src

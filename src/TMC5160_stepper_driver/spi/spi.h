@@ -24,10 +24,10 @@ typedef enum
     GLOBAL_SCALAR   = 0x0B,
     OFFSET_READ     = 0x0C,
     IHOLD_RUN       = 0x10,
-    TPOWER_DOWN     = 0x11,
+    TPOWERDOWN      = 0x11,
     TSTEP           = 0x12,
-    TPWMTHRS        = 0x13,
-    TCOOLTHRS       = 0x14,
+    TPWM_THRS       = 0x13,
+    TCOOL_THRS      = 0x14,
     THIGH           = 0x15,
     RAMPMODE        = 0x20,
     XACTUAL         = 0x21,
@@ -72,7 +72,20 @@ typedef enum
     PWM_SCALE       = 0x71,
     PWM_AUTO        = 0x72,
     LOST_STEPS      = 0x73
-}driver_reg_t;
+}drv_reg_t;
+
+//enum for representing driver index
+typedef enum
+{
+    DRIVER0 = _BV(PA0),
+    DRIVER1 = _BV(PA1),
+    DRIVER2 = _BV(PA2),
+    DRIVER3 = _BV(PA3),
+    DRIVER4 = _BV(PA4),
+    DRIVER5 = _BV(PA5),
+    DRIVER6 = _BV(PA6),
+    DRIVER7 = _BV(PA7)
+}drv_idx_t;
 
 //type for storing spi status
 typedef uint8_t spi_stat_t;
@@ -81,9 +94,9 @@ typedef uint8_t spi_stat_t;
 void spi_init();
 
 //send 40-bit data frame consisting of 8-bit adress and 32-bit data, returns spi status byte
-spi_stat_t spi_send(driver_reg_t reg, uint32_t data);
+spi_stat_t spi_send(drv_idx_t drv, drv_reg_t reg, uint32_t data);
 
 //receive 32-bit data
-uint32_t spi_receive();
+uint32_t spi_receive(drv_idx_t drv);
 
 #endif //! __TMC5160_SPI_H__

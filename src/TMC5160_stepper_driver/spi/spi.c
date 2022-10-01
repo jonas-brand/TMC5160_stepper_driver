@@ -6,9 +6,16 @@
 #define MOSI PB2
 #define MISO PB3
 
+//chip select register
+#define CS_REG GPIO_A
+
 //function for setting up spi modul
 void spi_init()
 {
+    //set chip select port as output and set all potputs to high
+    CS_REG->ddrx = 0xFF;
+    CS_REG->portx = 0xFF;
+
     //write the power reduction spi bit to 0 to enable spi operation
     PRR0 &= _BV(PRSPI);
 
@@ -25,7 +32,7 @@ void spi_init()
 }
 
 //function for transmitting and receiving data
-uint8_t spi_com(uint8_t data_out)
+static uint8_t spi_com(uint8_t data_out)
 {
     //transmit data
     SPDR = data_out;
@@ -38,8 +45,11 @@ uint8_t spi_com(uint8_t data_out)
 }
 
 //send 40-bit data frame consisting of 8-bit adress and 32-bit data, returns spi status byte
-spi_stat_t spi_send(driver_reg_t reg, uint32_t data)
+spi_stat_t spi_send(drv_idx_t drv, drv_reg_t reg, uint32_t data)
 {
+    //start transaction
+    CS_REG->portx &= ~drv;
+
     //transmit adress with write bit set to one
     spi_com(reg | 0b10000000);
 
@@ -48,10 +58,13 @@ spi_stat_t spi_send(driver_reg_t reg, uint32_t data)
     spi_com((uint8_t)(data >> 16));
     spi_com((uint8_t)(data >> 8));
     return spi_com((uint8_t)(data));
+
+    //stop transaction
+    CS_REG->portx = 0xFF;
 }
 
 //receive 32-bit data
-uint32_t spi_receive()
+uint32_t spi_receive(drv_idx_t drv)
 {
     //read and discard status byte
     spi_com(0);

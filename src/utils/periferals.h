@@ -22,17 +22,17 @@ typedef struct
     reg8_t portx;  //port
 }* gpio_ptr_t;
 
-#define GPIO_A (gpio_ptr_t)&PINA
-#define GPIO_B (gpio_ptr_t)&PINB
-#define GPIO_C (gpio_ptr_t)&PINC
-#define GPIO_D (gpio_ptr_t)&PIND
-#define GPIO_E (gpio_ptr_t)&PINE
-#define GPIO_F (gpio_ptr_t)&PINF
-#define GPIO_G (gpio_ptr_t)&PING
-#define GPIO_H (gpio_ptr_t)&PINH
-#define GPIO_J (gpio_ptr_t)&PINJ
-#define GPIO_K (gpio_ptr_t)&PINK
-#define GPIO_L (gpio_ptr_t)&PINL
+#define GPIO_A ((gpio_ptr_t)&PINA)
+#define GPIO_B ((gpio_ptr_t)&PINB)
+#define GPIO_C ((gpio_ptr_t)&PINC)
+#define GPIO_D ((gpio_ptr_t)&PIND)
+#define GPIO_E ((gpio_ptr_t)&PINE)
+#define GPIO_F ((gpio_ptr_t)&PINF)
+#define GPIO_G ((gpio_ptr_t)&PING)
+#define GPIO_H ((gpio_ptr_t)&PINH)
+#define GPIO_J ((gpio_ptr_t)&PINJ)
+#define GPIO_K ((gpio_ptr_t)&PINK)
+#define GPIO_L ((gpio_ptr_t)&PINL)
 
 //==================================================================================timers
 
