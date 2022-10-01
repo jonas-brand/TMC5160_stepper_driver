@@ -38,10 +38,10 @@ uint8_t spi_com(uint8_t data_out)
 }
 
 //send 40-bit data frame consisting of 8-bit adress and 32-bit data, returns spi status byte
-spi_stat_t spi_send(uint8_t addr, uint32_t data)
+spi_stat_t spi_send(driver_reg_t reg, uint32_t data)
 {
-    //transmit adress
-    spi_com(addr);
+    //transmit adress with write bit set to one
+    spi_com(reg | 0b10000000);
 
     //transmit data
     spi_com((uint8_t)(data >> 24));
