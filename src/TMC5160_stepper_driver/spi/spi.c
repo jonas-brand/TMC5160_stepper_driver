@@ -28,7 +28,7 @@ void spi_init()
     SPCR = _BV(MSTR) | _BV(CPOL) | _BV(CPHA) | _BV(SPR0);
 
     //enable spi
-    SPCR = _BV(SPE);
+    SPCR |= _BV(SPE);
 }
 
 //function for transmitting and receiving data
@@ -38,7 +38,7 @@ static uint8_t spi_com(uint8_t data_out)
     SPDR = data_out;
 
     //wait until transmission is finished
-    while(SPSR & _BV(SPIF));
+    while(!(SPSR & _BV(SPIF)));
     
     //return received data
     return SPDR;
@@ -54,13 +54,16 @@ spi_stat_t spi_send(drv_idx_t drv, drv_reg_t reg, uint32_t data)
     spi_com(reg | 0b10000000);
 
     //transmit data
-    spi_com((uint8_t)(data >> 24));
+    spi_stat_t stat = spi_com((uint8_t)(data >> 24));
     spi_com((uint8_t)(data >> 16));
     spi_com((uint8_t)(data >> 8));
-    return spi_com((uint8_t)(data));
+    spi_com((uint8_t)(data));
 
     //stop transaction
     CS_REG->portx = 0xFF;
+
+    //return status byte
+    return stat;
 }
 
 //receive 32-bit data
