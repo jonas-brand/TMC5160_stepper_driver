@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "spi.h": "c",
-        "periferals.h": "c",
-        "driver.h": "c"
-    }
-}

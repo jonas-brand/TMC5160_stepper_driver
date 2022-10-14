@@ -3,21 +3,21 @@ DIR = $(shell cd)
 
 #program paths
 CC = avr-gcc
-OBJCOPY = "C:\avr-gcc-11.1.0-x64-windows\avr-gcc-11.1.0-x64-windows\bin\avr-objcopy"
-AVRDUDE = "C:\avr-gcc-11.1.0-x64-windows\avr-gcc-11.1.0-x64-windows\bin\avrdude"
+OBJCOPY = avr-objcopy
+AVRDUDE = avrdude
 
 #usb-port
 USBPORT = COM3
 
 #flags
-CFLAGS = -Os -DF_CPU=16000000L -mmcu=atmega2560 -I$(DIR)\src
+CFLAGS = -Os -DF_CPU=16000000L -mmcu=atmega2560 -I$(DIR)\_src
 BFLAGS = -D -F -V -c wiring -p ATMEGA2560 -P $(USBPORT) -b 115200
 
 #BUILD===================================================================================================
 
 #lists of source and object files
-SRC_FILES := $(shell powershell Get-ChildItem src -Recurse -Name -Filter *.c)
-OBJ_FILES := $(patsubst %.c, bin\\%.o, $(SRC_FILES))
+_src_FILES := $(shell powershell Get-ChildItem _src -Recurse -Name -Filter *.c)
+OBJ_FILES := $(patsubst %.c, bin\\%.o, $(_src_FILES))
 
 #defult rule
 all: bin\\out.out
@@ -27,7 +27,7 @@ bin\\out.out: $(OBJ_FILES)
 	$(CC) $(CFLAGS) $^ -o $@
 
 #compile .c file to .o file
-bin\\%.o: src\\%.c
+bin\\%.o: _src\\%.c
 	powershell $$null = mkdir -Force $(dir $@)
 	$(CC) $(CFLAGS) -c $^ -o $@
 
