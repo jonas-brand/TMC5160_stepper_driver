@@ -12,16 +12,16 @@
 //function for setting up spi modul
 void spi_init()
 {
-    //set chip select port as output and set all potputs to high
+    //set chip select port as output and set all outputs to high
     CS_REG->ddrx = 0xFF;
     CS_REG->portx = 0xFF;
 
     //write the power reduction spi bit to 0 to enable spi operation
-    PRR0 &= _BV(PRSPI);
+    PRR0 &= ~_BV(PRSPI);
 
     //set MOSI and SCK as output, MISO as input
     DDR_SPI |= _BV(MOSI) | _BV(SCK);
-    DDR_SPI &= _BV(MISO);
+    DDR_SPI &= ~_BV(MISO);
 
     //configure spi control register
     //master operation, spi mode 3, SCK frequency = F_CPU / 16

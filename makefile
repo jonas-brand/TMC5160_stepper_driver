@@ -7,7 +7,7 @@ OBJCOPY = avr-objcopy
 AVRDUDE = avrdude
 
 #usb-port
-USBPORT = COM3
+USBPORT = COM14
 
 #flags
 CFLAGS = -Os -DF_CPU=16000000L -mmcu=atmega2560 -I$(DIR)\_src
