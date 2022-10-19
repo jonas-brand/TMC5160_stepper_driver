@@ -21,9 +21,9 @@ typedef enum
     FACTORY_CONF    = 0x08,
     SHORT_CONF      = 0x09,
     DRV_CONF        = 0x0A,
-    GLOBAL_SCALAR   = 0x0B,
+    GLOBALSCALAR    = 0x0B,
     OFFSET_READ     = 0x0C,
-    IHOLD_RUN       = 0x10,
+    IHOLD_IRUN      = 0x10,
     TPOWERDOWN      = 0x11,
     TSTEP           = 0x12,
     TPWM_THRS       = 0x13,
@@ -97,6 +97,6 @@ void spi_init();
 spi_stat_t spi_send(drv_idx_t drv, drv_reg_t reg, uint32_t data);
 
 //receive 32-bit data
-uint32_t spi_receive(drv_idx_t drv);
+uint32_t spi_receive(drv_idx_t drv, drv_reg_t reg);
 
 #endif //! __TMC5160_SPI_H__

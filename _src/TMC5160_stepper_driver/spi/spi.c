@@ -67,8 +67,24 @@ spi_stat_t spi_send(drv_idx_t drv, drv_reg_t reg, uint32_t data)
 }
 
 //receive 32-bit data
-uint32_t spi_receive(drv_idx_t drv)
+uint32_t spi_receive(drv_idx_t drv, drv_reg_t reg)
 {
+    //start transaction
+    CS_REG->portx &= ~drv;
+
+    //transmit adress
+    spi_com(reg);
+
+    //transmit dummy bytes
+    for(uint8_t i = 0; i < 4; i++)
+        spi_com(0);
+
+    //stop transaction
+    CS_REG->portx = 0xFF;
+
+    //start transaction
+    CS_REG->portx &= ~drv;
+
     //read and discard status byte
     spi_com(0);
 
@@ -77,5 +93,11 @@ uint32_t spi_receive(drv_idx_t drv)
     data = (uint32_t)spi_com(0) << 24;
     data |= (uint32_t)spi_com(0) << 16;
     data |= (uint32_t)spi_com(0) << 8;
-    return data |= (uint32_t)spi_com(0);
+    data |= (uint32_t)spi_com(0);
+
+    //stop transaction
+    CS_REG->portx = 0xFF;
+
+    //return read data
+    return data;
 }
