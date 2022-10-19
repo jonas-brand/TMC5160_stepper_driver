@@ -24,7 +24,7 @@ all: bin\\out.out
 
 #link all .o files together
 bin\\out.out: $(OBJ_FILES)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@ -L. -lm
 
 #compile .c file to .o file
 bin\\%.o: _src\\%.c
