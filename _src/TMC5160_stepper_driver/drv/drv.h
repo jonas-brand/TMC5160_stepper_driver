@@ -10,4 +10,7 @@ typedef struct
     drv_idx_t idx;
 }stp_drv_t;
 
+//function for setting up driver
+bool stp_drv_init(stp_drv_t* self, drv_idx_t idx);
+
 #endif //! __TMC5160_DRV_H__
