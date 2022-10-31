@@ -21,6 +21,6 @@ typedef enum
 void stp_drv_init(drv_idx_t self, float i_max/*mA*/, stp_drv_res_t res);
 
 //function for moving motor by given number of steps at given speed and acceleration
-void stp_drv_mov(drv_idx_t self, int32_t dist/*steps*/, uint16_t v/*steps/s*/, uint16_t a/*steps/s^2*/);
+void stp_drv_mov(drv_idx_t self, int32_t dist/*steps*/, uint32_t v/*steps/s*/, uint32_t a/*steps/s^2*/);
 
 #endif //! __TMC5160_DRV_H__
