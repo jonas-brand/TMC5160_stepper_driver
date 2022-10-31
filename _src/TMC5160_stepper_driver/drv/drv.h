@@ -4,12 +4,6 @@
 #include "utils/periferals.h"
 #include "TMC5160_stepper_driver/spi/spi.h"
 
-//struct for stepper driver
-typedef struct
-{
-    drv_idx_t idx;
-}stp_drv_t;
-
 //enum for representing microstep resolution
 typedef enum
 {
@@ -25,6 +19,6 @@ typedef enum
 }stp_drv_res_t;
 
 //function for setting up driver
-void stp_drv_init(stp_drv_t* self, drv_idx_t idx, float i_max/*mA*/, stp_drv_res_t res);
+void stp_drv_init(drv_idx_t self, drv_idx_t idx, float i_max/*mA*/, stp_drv_res_t res);
 
 #endif //! __TMC5160_DRV_H__

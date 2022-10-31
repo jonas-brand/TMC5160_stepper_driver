@@ -41,23 +41,23 @@ static uint8_t get_global_scalar(float i_max/*mA*/)
 }
 
 //function for setting up driver
-void stp_drv_init(stp_drv_t* self, drv_idx_t idx, float i_max/*mA*/, stp_drv_res_t res)
+void stp_drv_init(drv_idx_t self, drv_idx_t idx, float i_max/*mA*/, stp_drv_res_t res)
 {
     //initialise self
-    self->idx = idx;
+    self = idx;
 
     //initialise spi
     spi_init();
 
     //set scalar according to supplied max current
-    spi_send(self->idx, GLOBALSCALAR, get_global_scalar(i_max));
+    spi_send(self, GLOBALSCALAR, get_global_scalar(i_max));
 
     //configure CHOPCONF for SpreadCycle
-    spi_send(self->idx, CHOPCONF, CHOPCONF_CONFIG | ((uint32_t)res<<MRES));
+    spi_send(self, CHOPCONF, CHOPCONF_CONFIG | ((uint32_t)res<<MRES));
 
     //configure IHOLD_IRUN
-    spi_send(self->idx, IHOLD_IRUN, IHOLD_IRUN_CONFIG);
+    spi_send(self, IHOLD_IRUN, IHOLD_IRUN_CONFIG);
 
     //configure TPOWERDOWN
-    spi_send(self->idx, TPOWERDOWN, TPOWERDOWN_CONFIG);
+    spi_send(self, TPOWERDOWN, TPOWERDOWN_CONFIG);
 }
