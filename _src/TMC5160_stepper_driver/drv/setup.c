@@ -1,6 +1,4 @@
-#include "drv.h"
-#include "math.h"
-#include "TMC5160_stepper_driver/spi/spi.h"
+#include "drv_const.h"
 
 //values needed to calculate global scalar
 #define V_FS 325.0f /*mV*/

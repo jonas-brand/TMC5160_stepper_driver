@@ -1,7 +1,6 @@
 #ifndef __TMC5160_DRV_H__
 #define __TMC5160_DRV_H__
 
-#include "utils/periferals.h"
 #include "TMC5160_stepper_driver/spi/spi.h"
 
 //enum for representing microstep resolution
