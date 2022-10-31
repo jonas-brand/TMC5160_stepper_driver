@@ -44,6 +44,10 @@ void stp_drv_init(drv_idx_t self, drv_idx_t idx, float i_max/*mA*/, stp_drv_res_
     //initialise self
     self = idx;
 
+    //set step/direction ports as output
+    DIR_REG->ddrx |= self;
+    STP_REG->ddrx |= self;
+
     //initialise spi
     spi_init();
 
