@@ -7,10 +7,12 @@
 #define R_S 75.0f /*mOhm*/
 
 //configuration for chopconf register
-#define TOFF 3  //controlls decay time
-#define HSTRT 4 //controlls start of chopper hysteresis
-#define HEND 1  //controlls end of chopper hysteresis
-#define CHOPCONF_CONFIG TOFF | (HSTRT<<4) | (HEND<<7)
+#define TOFF 3      //controlls decay time
+#define HSTRT 4     //controlls start of chopper hysteresis
+#define HEND 1      //controlls end of chopper hysteresis
+#define INTPOL 28   //flag for microstep interpolation
+#define MRES 24     //position of microstep resolution bits
+#define CHOPCONF_CONFIG TOFF | (HSTRT<<4) | (HEND<<7) | _BV(INTPOL)
 
 //configuration for IHOLD_IRUN register
 #define IRUN 31                         //scaler for running current (31 = max)
@@ -39,7 +41,7 @@ static uint8_t get_global_scalar(float i_max/*mA*/)
 }
 
 //function for setting up driver
-bool stp_drv_init(stp_drv_t* self, drv_idx_t idx, float i_max/*mA*/)
+void stp_drv_init(stp_drv_t* self, drv_idx_t idx, float i_max/*mA*/, stp_drv_res_t res)
 {
     //initialise self
     self->idx = idx;
@@ -51,7 +53,7 @@ bool stp_drv_init(stp_drv_t* self, drv_idx_t idx, float i_max/*mA*/)
     spi_send(self->idx, GLOBALSCALAR, get_global_scalar(i_max));
 
     //configure CHOPCONF for SpreadCycle
-    spi_send(self->idx, CHOPCONF, CHOPCONF_CONFIG);
+    spi_send(self->idx, CHOPCONF, CHOPCONF_CONFIG | ((uint32_t)res<<MRES));
 
     //configure IHOLD_IRUN
     spi_send(self->idx, IHOLD_IRUN, IHOLD_IRUN_CONFIG);
