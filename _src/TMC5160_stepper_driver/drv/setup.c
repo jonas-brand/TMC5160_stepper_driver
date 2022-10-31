@@ -39,11 +39,8 @@ static uint8_t get_global_scalar(float i_max/*mA*/)
 }
 
 //function for setting up driver
-void stp_drv_init(drv_idx_t self, drv_idx_t idx, float i_max/*mA*/, stp_drv_res_t res)
+void stp_drv_init(drv_idx_t self, float i_max/*mA*/, stp_drv_res_t res)
 {
-    //initialise self
-    self = idx;
-
     //set step/direction ports as output
     DIR_REG->ddrx |= self;
     STP_REG->ddrx |= self;
