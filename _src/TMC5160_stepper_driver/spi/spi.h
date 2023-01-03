@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <utils/periferals.h>
+#include <TMC5160_stepper_driver/drv/drv.h>
 
 //enum for representing driver register
 typedef enum
@@ -74,24 +75,11 @@ typedef enum
     LOST_STEPS      = 0x73
 }drv_reg_t;
 
-//enum for representing driver index
-typedef enum
-{
-    DRIVER0 = _BV(PA0),
-    DRIVER1 = _BV(PA1),
-    DRIVER2 = _BV(PA2),
-    DRIVER3 = _BV(PA3),
-    DRIVER4 = _BV(PA4),
-    DRIVER5 = _BV(PA5),
-    DRIVER6 = _BV(PA6),
-    DRIVER7 = _BV(PA7)
-}drv_idx_t;
-
 //type for storing spi status
 typedef uint8_t spi_stat_t;
 
 //function for setting up spi modul
-void spi_init();
+void spi_init(gpio_ptr_t _cs_reg);
 
 //send 40-bit data frame consisting of 8-bit adress and 32-bit data, returns spi status byte
 spi_stat_t spi_send(drv_idx_t drv, drv_reg_t reg, uint32_t data);

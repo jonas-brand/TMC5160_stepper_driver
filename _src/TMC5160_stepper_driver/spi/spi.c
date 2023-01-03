@@ -7,14 +7,17 @@
 #define MISO PB3
 
 //chip select register
-#define CS_REG GPIO_A
+static gpio_ptr_t cs_reg;
 
 //function for setting up spi modul
-void spi_init()
+void spi_init(gpio_ptr_t _cs_reg)
 {
+    //set chip select port
+    cs_reg = _cs_reg;
+
     //set chip select port as output and set all outputs to high
-    CS_REG->ddrx = 0xFF;
-    CS_REG->portx = 0xFF;
+    cs_reg->ddrx = 0xFF;
+    cs_reg->portx = 0xFF;
 
     //write the power reduction spi bit to 0 to enable spi operation
     PRR0 &= ~_BV(PRSPI);
@@ -48,7 +51,7 @@ static uint8_t spi_com(uint8_t data_out)
 spi_stat_t spi_send(drv_idx_t drv, drv_reg_t reg, uint32_t data)
 {
     //start transaction
-    CS_REG->portx &= ~drv;
+    cs_reg->portx &= ~drv;
 
     //transmit adress with write bit set to one
     spi_com(reg | 0b10000000);
@@ -60,7 +63,7 @@ spi_stat_t spi_send(drv_idx_t drv, drv_reg_t reg, uint32_t data)
     spi_com((uint8_t)(data));
 
     //stop transaction
-    CS_REG->portx = 0xFF;
+    cs_reg->portx = 0xFF;
 
     //return status byte
     return stat;
@@ -70,7 +73,7 @@ spi_stat_t spi_send(drv_idx_t drv, drv_reg_t reg, uint32_t data)
 uint32_t spi_receive(drv_idx_t drv, drv_reg_t reg)
 {
     //start transaction
-    CS_REG->portx &= ~drv;
+    cs_reg->portx &= ~drv;
 
     //transmit adress
     spi_com(reg);
@@ -80,10 +83,10 @@ uint32_t spi_receive(drv_idx_t drv, drv_reg_t reg)
         spi_com(0);
 
     //stop transaction
-    CS_REG->portx = 0xFF;
+    cs_reg->portx = 0xFF;
 
     //start transaction
-    CS_REG->portx &= ~drv;
+    cs_reg->portx &= ~drv;
 
     //read and discard status byte
     spi_com(0);
@@ -96,7 +99,7 @@ uint32_t spi_receive(drv_idx_t drv, drv_reg_t reg)
     data |= (uint32_t)spi_com(0);
 
     //stop transaction
-    CS_REG->portx = 0xFF;
+    cs_reg->portx = 0xFF;
 
     //return read data
     return data;

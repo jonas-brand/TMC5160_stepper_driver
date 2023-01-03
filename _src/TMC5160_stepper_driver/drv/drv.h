@@ -1,7 +1,21 @@
 #ifndef __TMC5160_DRV_H__
 #define __TMC5160_DRV_H__
 
-#include "TMC5160_stepper_driver/spi/spi.h"
+#include <stdbool.h>
+#include <utils/periferals.h>
+
+//enum for representing driver index
+typedef enum
+{
+    DRIVER0 = _BV(PA0),
+    DRIVER1 = _BV(PA1),
+    DRIVER2 = _BV(PA2),
+    DRIVER3 = _BV(PA3),
+    DRIVER4 = _BV(PA4),
+    DRIVER5 = _BV(PA5),
+    DRIVER6 = _BV(PA6),
+    DRIVER7 = _BV(PA7)
+}drv_idx_t;
 
 //enum for representing microstep resolution
 typedef enum
@@ -15,12 +29,18 @@ typedef enum
     MICROSTEP_4 =   6,
     MICROSTEP_2 =   7,
     FULLSTEP =      8
-}stp_drv_res_t;
+}drv_res_t;
+
+//function for setting ports
+void drv_set_ports(gpio_ptr_t _cs_reg, gpio_ptr_t _dir_reg, gpio_ptr_t _stp_reg);
 
 //function for setting up driver
-void stp_drv_init(drv_idx_t self, float i_max/*mA*/, stp_drv_res_t res);
+bool drv_init(drv_idx_t self, float i_max/*mA*/, drv_res_t res);
 
-//function for moving motor by given number of steps at given speed and acceleration
-void stp_drv_mov(drv_idx_t self, int32_t dist/*steps*/, uint32_t v/*steps/s*/, uint32_t a/*steps/s^2*/);
+//function for moving motor one step forwards (dir == LOW)
+void drv_stp_fw(drv_idx_t self);
+
+//function for moving motor one step backwards (dir == HIGH)
+void drv_stp_bw(drv_idx_t self);
 
 #endif //! __TMC5160_DRV_H__
