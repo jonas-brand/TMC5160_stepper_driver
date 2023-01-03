@@ -104,3 +104,18 @@ uint32_t spi_receive(drv_idx_t drv, drv_reg_t reg)
     //return read data
     return data;
 }
+
+//function for checking spi status byte. returns value uf DRV_STATUS if driver error is signaled, 0 if not
+uint32_t spi_check(drv_idx_t drv, spi_stat_t stat)
+{
+    //check if driver error bit is set
+    if(! (stat & _BV(1))) return 0;
+
+    //read driver status
+    uint32_t drv_status = spi_receive(drv, DRV_STATUS);
+
+    //try to clear error flag by reading GCONF
+    spi_receive(drv, GCONF);
+
+    return drv_status;
+}

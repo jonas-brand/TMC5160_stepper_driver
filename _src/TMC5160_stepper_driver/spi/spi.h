@@ -87,4 +87,7 @@ spi_stat_t spi_send(drv_idx_t drv, drv_reg_t reg, uint32_t data);
 //receive 32-bit data
 uint32_t spi_receive(drv_idx_t drv, drv_reg_t reg);
 
+//function for checking spi status byte. returns value uf DRV_STATUS if driver error is signaled, 0 if not
+uint32_t spi_check(drv_idx_t drv, spi_stat_t stat);
+
 #endif //! __TMC5160_SPI_H__

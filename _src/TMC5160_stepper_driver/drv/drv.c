@@ -53,30 +53,34 @@ void drv_set_ports(gpio_ptr_t _cs_reg, gpio_ptr_t _dir_reg, gpio_ptr_t _stp_reg)
     stp_reg = _stp_reg;
 }
 
-//function for setting up driver
-bool drv_init(drv_idx_t self, float i_max/*mA*/, drv_res_t res)
+//function for setting up driver, returns value of DRV_STATUS if spi signals error, UINT32_MAX if drv_set_ports was never called
+uint32_t drv_init(drv_idx_t self, float i_max/*mA*/, drv_res_t res)
 {
     //check if variables have been initialised
-    if(dir_reg == NULL) return false;
-    if(stp_reg == NULL) return false;
+    if(dir_reg == NULL) return UINT32_MAX;
+    if(stp_reg == NULL) return UINT32_MAX;
 
     //set step/direction ports as output
     dir_reg->ddrx |= self;
     stp_reg->ddrx |= self;
 
     //set scalar according to supplied max current
-    spi_send(self, GLOBALSCALAR, get_global_scalar(i_max));
+    uint32_t spi_stat = spi_check(self, spi_send(self, GLOBALSCALAR, get_global_scalar(i_max)));
+    if(spi_stat != 0) return spi_stat;
 
     //configure CHOPCONF for SpreadCycle
-    spi_send(self, CHOPCONF, CHOPCONF_CONFIG | ((uint32_t)res<<MRES));
+    spi_stat = spi_check(self, spi_send(self, CHOPCONF, CHOPCONF_CONFIG | ((uint32_t)res<<MRES)));
+    if(spi_stat != 0) return spi_stat;
 
     //configure IHOLD_IRUN
-    spi_send(self, IHOLD_IRUN, IHOLD_IRUN_CONFIG);
+    spi_stat = spi_check(self, spi_send(self, IHOLD_IRUN, IHOLD_IRUN_CONFIG));
+    if(spi_stat != 0) return spi_stat;
 
     //configure TPOWERDOWN
-    spi_send(self, TPOWERDOWN, TPOWERDOWN_CONFIG);
+    spi_stat = spi_check(self, spi_send(self, TPOWERDOWN, TPOWERDOWN_CONFIG));
+    if(spi_stat != 0) return spi_stat;
 
-    return true;
+    return 0;
 }
 
 //function for moving motor one step forwards (dir == LOW)

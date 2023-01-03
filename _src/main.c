@@ -1,5 +1,6 @@
 #include <TMC5160_stepper_driver/drv/drv.h>
 #include <util/delay.h>
+#include <utils/print.h>
 
 int main(void)
 {

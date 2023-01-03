@@ -34,8 +34,8 @@ typedef enum
 //function for setting ports
 void drv_set_ports(gpio_ptr_t _cs_reg, gpio_ptr_t _dir_reg, gpio_ptr_t _stp_reg);
 
-//function for setting up driver
-bool drv_init(drv_idx_t self, float i_max/*mA*/, drv_res_t res);
+//function for setting up driver, returns value of DRV_STATUS if spi signals error, UINT32_MAX if drv_set_ports was never called
+uint32_t drv_init(drv_idx_t self, float i_max/*mA*/, drv_res_t res);
 
 //function for moving motor one step forwards (dir == LOW)
 void drv_stp_fw(drv_idx_t self);
